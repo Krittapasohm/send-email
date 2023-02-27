@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <form id="pdf-form" enctype="multipart/form-data">
+    <select name="namecase" id="namecase">
+  <option value="">ประเภทรายงานอุบัติการณ์/อุบัติเหตุ</option>
+  <option value="heavy">รายงานอุบัติการณ์/อุบัติเหตุเบื้องต้น (ยังไม่ได้สอบสวน)</option>
+  <option value="light">รายงานการสอบสวนอุบัติการณ์/อุบัติเหตุ (ฉบับสมบูรณ์)</option>
+</select>
+<p> <input type="text" name="numberproject" placeholder="หมายเลขโครงการ"  ></p>
+<p> <input type="text" name="nameproject" placeholder="ชื่อโครงการ"  ></p>
+<p> <input type="text" name="namereport" placeholder="เลขที่รายงาน"  ></p>
+<p> <input type="text" name="nameretopic" placeholder="หัวข้ออุบัติเหตุ(อย่างย่อ) "  ></p>
+<p> <input type="date" name="date" placeholder="หัวข้ออุบัติเหตุ(อย่างย่อ) "  ></p>
+
+<select name="sendType" >
+        <option value="" required="">โปรดเลือกส่งไฟล์รายงานอุบัติเหตุ </option>
+        <option value="pdf"required>เลือกส่งไฟล์</option>
+        <option value="form">พิมพ์หมายเหตุเอง</option>
+      </select>
+
+      <div id="pdf-section" style="display: none;">
+        <input type="file" name="pdf" multiple>
+      </div>
+      <div id="form-section" style="display: none;">
+        <textarea name="formData" placeholder="โปรดพิมพ์ข้อความ" ></textarea>
+      </div>
+
+      <p><select name="sendType1" >
+  <option value="" >โปรดรูปภาพประกอบ </option>
+<option value="wold" required="">เลือกรูปภาพ</option>
+</select></p>
+<div id="wold-section" style="display: none;">
+        <input type="file" name="wold" multiple>
+      </div>
+
+     <p> <input type="email" name="email" placeholder="อีเมลผู้รับที่อยู่ภายในโครงการ" ></p>
+
+      </p><input type="submit" value="Send"><p>
+    </form>
+
+    <div id="success-message" style="display: none;">
+      File sent successfully!
+    </div>
+    <script>
+      document.getElementById('pdf-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        var sendType = this.elements.sendType.value;
+        var sendType1 = this.elements.sendType1.value;
+        if (sendType === 'pdf') {
+          google.script.run.withSuccessHandler(function() {
+            document.getElementById('pdf-form').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+          }).processForm(this);
+        } 
+        else if (sendType1 === 'wold') {
+          google.script.run.withSuccessHandler(function() {
+            document.getElementById('pdf-form').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+          }).processForm(this);
+        }
+        else if (sendType === 'form') {
+          google.script.run.withSuccessHandler(function() {
+            document.getElementById('pdf-form').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+          }).processFormData(this);
+        }
+      });
+      document.getElementById('pdf-form').addEventListener('change', function(e) {
+if (e.target.name === 'sendType' || e.target.name === 'sendType1') {
+          var sendType = e.target.value;
+          var sendType1 = e.target.value;
+          if (sendType === 'pdf') {
+            document.getElementById('pdf-section').style.display = 'block';
+            document.getElementById('form-section').style.display = 'none';
+          } 
+          else if  (sendType1 === 'wold') {
+            document.getElementById('wold-section').style.display = 'block';
+          }else if (sendType === 'form') {
+            document.getElementById('pdf-section').style.display = 'none';
+            document.getElementById('form-section').style.display = 'block';
+          } 
+          else {
+            document.getElementById('pdf-section').style.display = 'none';
+            document.getElementById('form-section').style.display = 'none';    
+            document.getElementById('wold-section').style.display = 'none';
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
